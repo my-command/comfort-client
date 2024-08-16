@@ -26,8 +26,9 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
     const [selectedOption, setSelectedOption] = useState('Eng');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [basketCount, setBasketCount] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState('All Categories');
     const navigate = useNavigate();
-    
+
 
     useEffect(() => {
         // LocalStorage'dan login holatini o'qish
@@ -60,9 +61,9 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                         }),
                     });
                 } else {
-                    setBasketCount(Number(user.basket)); 
+                    setBasketCount(Number(user.basket));
                 }
-                
+
             } else {
                 setBasketCount(0);
             }
@@ -95,6 +96,11 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+    const handleCategoryChange = (category) => {
+        setSelectedCategory(category);
+        setDropdownOpen(false); // Close dropdown after selecting
+    };
+
 
     return (
         <div className='sticky top-0 z-10'>
@@ -127,12 +133,11 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                     </div>
                 </div>
             </div>
-
             {/* Main Navbar */}
             <div className='flex items-center w-full bg-[#F0F2F3] py-5 px-36 justify-between'>
                 <div>
                     <Link to="/" className='flex items-center gap-2'>
-                        <img src={logo} alt="Logo" />
+                        <img src={logo} alt="" />
                         <p className='font-inter text-2xl font-medium leading-8 text-left text-[#272343]'>
                             Comforty
                         </p>
@@ -142,91 +147,113 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                     <input
                         type="text"
                         placeholder="Search here..."
-                        className="w-[413px] pl-4 py-3 border border-transparent bg-white rounded-[5px] focus:outline-none focus:placeholder:text-[#9A9CAA] placeholder:text-[#9A9CAA] text-[#9A9CAA] font-inter text-base font-normal leading-6 text-left"
+                        className="w-[413px]  pl-4 py-3 border border-transparent bg-white rounded-[5px] focus:outline-none focus:placeholder:text-[#9A9CAA] placeholder:text-[#9A9CAA] text-[#9A9CAA] font-inter text-base font-normal leading-6 text-left"
                     />
                     <img
                         src={search}
-                        alt="Search"
+                        alt=""
                         className="absolute left-[91%] top-1/2 transform -translate-y-1/2"
                     />
                 </div>
                 <div className='flex items-center gap-3'>
-                    <div className='flex items-center p-3 bg-white rounded-lg gap-2 w-32'>
-                        <button className='flex items-center gap-3' onClick={handleCartClick}>
-                            <img className='w-7' src={shop} alt="Cart" />
-                            <p className='font-medium flex items-center gap-3 text-lg leading-4 text-center text-[#4e4e4f]'>
-                                Cart
-                                <div className='w-6 h-6 flex items-center justify-center text-sm rounded-full text-white font-normal bg-emerald-700'>
-                                    {basketCount}
-                                </div>
-                            </p>
-                        </button>
+                    <div className='flex items-center p-3 bg-white rounded-lg gap-2'>
+                        <img src={shop} alt="" />
+                        <p className='font-inter text-xs font-medium leading-4 text-center text-[#272343]'>
+                            Cart
+                        </p>
                     </div>
                     <div className='flex items-center p-3 bg-white rounded-lg'>
                         <HeartIcon />
                     </div>
-                    <div className='flex items-center p-3 h-12 bg-white rounded-lg'>
-                        {!loggedInUser ? (
-                            <button type='button' onClick={handleLoginClick} >
-                                <img src={login} alt="Login" />
-                            </button>
-                        ) : (
-                            <div className='flex items-center gap-2'>
-                                <p className='flex items-center'>{loggedInUser}</p>
-                                <button onClick={handleLogout} className='bg-red-500 text-white px-3 py-1 rounded'>Logout</button>
-                            </div>
-                        )}
+                    <div className='flex items-center p-3 bg-white rounded-lg'>
+                        <img src={login} alt="" />
                     </div>
                 </div>
             </div>
-            {/* Bottom Navbar */}
-            <div className='flex items-center py-[14px] px-[210px] bg-white justify-between overflow-x-auto'>
+
+
+            {/* Bottom Navbar */} <div className='flex items-center py-[14px] px-[210px] bg-white justify-between'>
                 <div className='flex items-center gap-8'>
-                    <nav className='relative border p-3 rounded-xl'>
+                    <nav className='relative border py-2 px-9 rounded-xl'>
                         <div className='mr-auto'>
                             <button
                                 onClick={toggleDropdown}
                                 className='bg-transparent border-none text-[14px] cursor-pointer'
                             >
-                                &#9776; All Categories
+                                {selectedCategory}
                             </button>
                             {dropdownOpen && (
                                 <div className='absolute top-full left-0 bg-white shadow-lg p-2 rounded-md z-10'>
-                                    <Link to="#category1" className='block py-1 px-2'>Category 1</Link>
-                                    <Link to="#category2" className='block py-1 px-2'>Category 2</Link>
-                                    <Link to="#category3" className='block py-1 px-2'>Category 3</Link>
+                                    <Link
+                                        to="/wing-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Wing Chair')}
+                                    >
+                                        Wing Chair
+                                    </Link>
+                                    <Link
+                                        to="/wooden-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Wooden Chair')}
+                                    >
+                                        Wooden Chair
+                                    </Link>
+                                    <Link
+                                        to="/desk-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Desk Chair')}
+                                    >
+                                        Desk Chair
+                                    </Link>
+                                    <Link
+                                        to="/park-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Park Chair')}
+                                    >
+                                        Park Chair
+                                    </Link>
+                                    <Link
+                                        to="/room-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Room Chair')}
+                                    >
+                                        Room Chair
+                                    </Link>
+                                    <Link
+                                        to="/scenic-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Scenic Chair')}
+                                    >
+                                        Scenic Chair
+                                    </Link>
+                                    <Link
+                                        to="/beautiful-chair"
+                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
+                                        onClick={() => handleCategoryChange('Beautiful Chair')}
+                                    >
+                                        Beautiful Chair
+                                    </Link>
                                 </div>
                             )}
                         </div>
                     </nav>
-                    <nav>
-                        <Link to="#" className='font-inter text-xs font-medium leading-4 text-left text-[#1a1a1a]'>
-                            New Arrival
-                        </Link>
-                    </nav>
-                    <nav>
-                        <Link to="#" className='font-inter text-xs font-medium leading-4 text-left text-[#1a1a1a]'>
-                            Best Seller
-                        </Link>
-                    </nav>
-                    <nav>
-                        <Link to="#" className='font-inter text-xs font-medium leading-4 text-left text-[#1a1a1a]'>
-                            Featured
-                        </Link>
-                    </nav>
-                    <nav>
-                        <Link to="#" className='font-inter text-xs font-medium leading-4 text-left text-[#1a1a1a]'>
-                            Explore
-                        </Link>
-                    </nav>
-                    <nav>
-                        <Link to="#" className='font-inter text-xs font-medium leading-4 text-left text-[#1a1a1a]'>
-                            Explore M
-                        </Link>
-                    </nav>
+                    <div className='flex gap-5 ml-5'>
+                        <Link to="#home" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Home</Link>
+                        <Link to="#shop" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Shop</Link>
+                        <Link to="#product" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Product</Link>
+                        <Link to="#pages" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Pages</Link>
+                        <Link to="#about" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>About</Link>
+                    </div>
+                </div>
+                <div className='flex items-center'>
+                    <p className='font-inter text-sm font-normal leading-[15.4px] text-[#636270] text-left'>Contact: </p>
+                    <p className='font-inter text-sm font-medium leading-[15.4px] text-[#272343] text-left'>(808) 555-0111</p>
                 </div>
             </div>
+
+            <hr className='w-full shadow-[0px_1px_0px_0px_#E1E3E5]' />
         </div>
+
     );
 };
 
