@@ -219,6 +219,11 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                             Explore
                         </Link>
                     </nav>
+                    <nav>
+                        <Link to="#" className='font-inter text-xs font-medium leading-4 text-left text-[#1a1a1a]'>
+                            Explore M
+                        </Link>
+                    </nav>
                 </div>
             </div>
         </div>
