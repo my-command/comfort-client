@@ -13,6 +13,7 @@ import RoomChairs from './pages/RoomChairs';
 import ParkChairs from './pages/ParkChairs';
 import Footer from './components/footer';
 import Basket from './pages/Basket';
+import EndFooter from './components/EndFooter';
 
 const Root = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -61,6 +62,7 @@ const Root = () => {
           </Routes>
           <Testimonials loggedInUser={loggedInUser} />
           <Footer />
+          <EndFooter/>
         </>
       )}
     </div>
