@@ -4,9 +4,12 @@ const Loading = () => {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
+        const timeOptions = [1000, 2000, 3000, 4000, 5000];
+        const randomTime = timeOptions[Math.floor(Math.random() * timeOptions.length)];
+
         const timer = setTimeout(() => {
             setIsVisible(false);
-        }, 3000);
+        }, randomTime);
 
         return () => clearTimeout(timer);
     }, []);
