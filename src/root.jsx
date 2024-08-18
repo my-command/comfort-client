@@ -14,13 +14,14 @@ import ParkChairs from './pages/ParkChairs';
 import Footer from './components/footer';
 import Basket from './pages/Basket';
 import EndFooter from './components/EndFooter';
+import Hamkorlar from './components/Hamkorlar';
+import Loading from './components/Loading';
 
 const Root = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [basketCount, setBasketCount] = useState(0);
 
- 
   const handleShowLogin = (show) => {
     setShowLogin(show);
   };
@@ -30,9 +31,9 @@ const Root = () => {
     setShowLogin(false);
   };
 
-
   return (
-     <div>
+    <div>
+      <Loading />
       <Navbar
         setShowLogin={handleShowLogin}
         loggedInUser={loggedInUser}
@@ -44,25 +45,22 @@ const Root = () => {
       ) : (
         <>
           <Banner />
-          {/* Conditional rendering of Basket based on user login */}
           {loggedInUser && <Basket />}
+          <Hamkorlar />
           <FeaturedProducts updateBasketCount={setBasketCount} loggedInUser={loggedInUser} />
           <Routes>
-          <Route path="/" element={<TopCategories />} >
-            <Route path="category/1" element={<DeskChairs />} />
-
+            <Route path="/" element={<TopCategories />} >
+              <Route path="category/1" element={<DeskChairs />} />
               <Route path="category/2" element={<WoodenChairs />} />
               <Route path="category/3" element={<DeskChairs />} />
               <Route path="category/4" element={<ParkChairs />} />
-
               <Route path="category/5" element={<RoomChairs />} />
               <Route path="/basket" element={<Basket />} />
-       
             </Route>
           </Routes>
           <Testimonials loggedInUser={loggedInUser} />
           <Footer />
-          <EndFooter/>
+          <EndFooter />
         </>
       )}
     </div>
