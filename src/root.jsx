@@ -26,11 +26,7 @@ const Root = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [basketCount, setBasketCount] = useState(0);
   const [like, setLikeCount] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = (query) => {
-      setSearchQuery(query);
-  };
   const handleShowLogin = (show) => {
     setShowLogin(show);
   };
@@ -48,35 +44,36 @@ const Root = () => {
         setLoggedInUser={setLoggedInUser}
         basketCount={basketCount}
         like={like}
-        onSearch={handleSearch}
       />
       {showLogin ? (
         <Login onLoginSuccess={handleLoginSuccess} />
       ) : (
         <>
           <Routes>
-            <Route
-              path="/"
+            <Route 
+              path="/" 
               element={
                 <>
                   <Banner />
-                  <FeaturedProducts searchQuery={searchQuery}  updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />
+                  <FeaturedProducts updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />
                   <TopCategories />
                   <Testimonials loggedInUser={loggedInUser} />
                 </>
-              }
-            />
-            <Route path="/category/1" element={<DeskChairs />} />
-            <Route path="/category/2" element={<WoodenChairs />} />
-            <Route path="/category/3" element={<DeskChairs />} />
-            <Route path="/category/4" element={<ParkChairs />} />
-            <Route path="/category/5" element={<RoomChairs />} />
+              } 
+            >
+              <Route path="category/1" element={<DeskChairs />} />
+              <Route path="category/2" element={<WoodenChairs />} />
+              <Route path="category/3" element={<DeskChairs />} />
+              <Route path="category/4" element={<ParkChairs />} />
+              <Route path="category/5" element={<RoomChairs />} />
+            </Route>
+            
             <Route path="/basket" element={<Basket />} />
             <Route path="/desk-chair" element={<DeskChairPage />} />
             <Route path="/park-chair" element={<ParkChairPage />} />
             <Route path="/room-chair" element={<RoomChairPage />} />
             <Route path="/wooden-chair" element={<WoodenChairPage />} />
-            <Route path="/like" element={<Like />} />
+      
           </Routes>
           <Footer />
           <EndFooter />
@@ -85,4 +82,5 @@ const Root = () => {
     </div>
   );
 };
+
 export default Root;
