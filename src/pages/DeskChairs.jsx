@@ -5,11 +5,11 @@ const DeskChairs = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5001/top_categories/')
+    fetch('http://localhost:5001/DeskProducts')
       .then(res => res.json())
       .then(data => {
-        const deskChairsCategory = data.find(v => v.title === 'Desk Chair');
-        setData(deskChairsCategory.DeskProducts);
+        // Barcha mahsulotlarni olish
+        setData(data);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);

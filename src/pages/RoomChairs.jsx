@@ -4,16 +4,15 @@ const RoomChairs = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5001/top_categories/')
+    fetch('http://localhost:5001/RoomProducts')
       .then(res => res.json())
       .then(data => {
-        const RoomChairsCategory = data.find(v => v.title === 'Room Chair');
-        if (RoomChairsCategory && RoomChairsCategory.RoomProducts) {
-          setData(RoomChairsCategory.RoomProducts);
-        }
+        
+        setData(data);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
+
 
   return (
     <div className='px-12 py-6 m-11'>

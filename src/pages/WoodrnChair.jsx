@@ -5,26 +5,17 @@ const WoodenChairs = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5001/top_categories')
+    fetch('http://localhost:5001/WoodenProducts')
       .then(res => res.json())
       .then(data => {
-        // Find the category with title 'Wooden Chair'
-        const woodenChairsCategory = data.find(category => category.title === 'Wooden Chair');
-        
-        // If category is found and it contains an array of products
-        if (woodenChairsCategory && Array.isArray(woodenChairsCategory.WoodenProducts)) {
-          // Filter products where title contains 'Wooden Chair'
-          const filteredProducts = woodenChairsCategory.WoodenProducts.filter(product => product.title && product.title.includes('Wooden Chair'));
-          setData(filteredProducts);
-        } else {
-          setData([]);
-        }
+        // Barcha mahsulotlarni olish
+        setData(data);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   return (
-    <div className='px-12 py-6 m-11'>
+    <div className='px-12 py-6 m-11 flex flex-col items-center'>
       <h1 className='text-4xl font-medium mb-8'>Wooden Chair</h1>
       <div className="flex flex-wrap justify-center gap-6 overflow-x-auto">
         {data.length > 0 ? data.map((product) => (

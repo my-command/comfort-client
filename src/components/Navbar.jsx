@@ -9,7 +9,7 @@ import login from '../../public/assets/login.png';
 
 const HeartIcon = () => (
     <svg
-        className="w-6 h-6 fill-current text-gray-500 hover:text-red-500"
+        className="w-6 h-6 fill-currentborder "
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="none"
@@ -26,12 +26,11 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
     const [selectedOption, setSelectedOption] = useState('Eng');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [basketCount, setBasketCount] = useState(0);
+    const [like, setLikeCount] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('All Categories');
     const navigate = useNavigate();
 
-
     useEffect(() => {
-        // LocalStorage'dan login holatini o'qish
         const savedLoggedInUser = localStorage.getItem('loggedInUser');
         if (savedLoggedInUser) {
             setLoggedInUser(savedLoggedInUser);
@@ -47,9 +46,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
 
             if (user) {
                 if (user.basketItems.length === 0) {
-                    // Basket bo'sh bo'lsa, basketCount ni 0 ga sozlash
                     setBasketCount(0);
-                    // Basket ni 0 ga tenglashtirish uchun API chaqiruvi
                     await fetch(`http://localhost:5001/Users/${user.id}`, {
                         method: 'PUT',
                         headers: {
@@ -63,7 +60,6 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                 } else {
                     setBasketCount(Number(user.basket));
                 }
-
             } else {
                 setBasketCount(0);
             }
@@ -71,24 +67,54 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
             console.error('Failed to fetch users:', error);
         }
     };
+    const fetchUserLike = async (username) => {
+        try {
+            const response = await fetch('http://localhost:5001/Users');
+            const data = await response.json();
+            const user = data.find(user => user.name === username);
 
+            if (user) {
+                if (user.likeitems.length === 0) {
+                    setLiketCount(0);
+                    await fetch(`http://localhost:5001/Users/${user.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ...user,
+                            like: 0
+                        }),
+                    });
+                } else {
+                    setLikeCount(Number(user.like));
+                }
+            } else {
+                setLikeCount(0);
+            }
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+        }
+    };
     const handleLoginClick = () => {
-        setLoggedInUser(null); // Set to null to prompt login
+        setLoggedInUser(null);
         localStorage.removeItem('loggedInUser');
         setShowLogin(true);
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('loggedInUser'); // Login holatini tozalash
+        localStorage.removeItem('loggedInUser');
         setLoggedInUser(null);
-        setBasketCount(0); // Reset basket count on logout
+        setBasketCount(0);
         navigate('/');
     };
 
     const handleCartClick = () => {
         navigate('/basket');
     };
-
+    const handleLikeClick = () => {
+        navigate('/like');
+    };
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
     };
@@ -96,11 +122,11 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
-        setDropdownOpen(false); // Close dropdown after selecting
+        setDropdownOpen(false);
     };
-
 
     return (
         <div className='sticky top-0 z-10'>
@@ -156,23 +182,45 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                     />
                 </div>
                 <div className='flex items-center gap-3'>
-                    <div className='flex items-center p-3 bg-white rounded-lg gap-2'>
-                        <img src={shop} alt="" />
-                        <p className='font-inter text-xs font-medium leading-4 text-center text-[#272343]'>
-                            Cart
-                        </p>
+                    <div className='flex items-center p-3 bg-white rounded-lg gap-2 w-32'>
+                        <Link to="/basket" onClick={handleCartClick}>
+                            <button className='flex items-center gap-3' >
+                                <img className='w-7' src={shop} alt="Cart" />
+                                <p className='font-medium flex items-center gap-3 text-lg leading-4 text-center text-[#4e4e4f]'>
+                                    Cart
+                                    <div className='w-6 h-6 flex items-center justify-center text-sm rounded-full text-white font-normal bg-emerald-700'>
+                                        {basketCount}
+                                    </div>
+                                </p>
+                            </button>
+                        </Link>
                     </div>
-                    <div className='flex items-center p-3 bg-white rounded-lg'>
-                        <HeartIcon />
-                    </div>
-                    <div className='flex items-center p-3 bg-white rounded-lg'>
-                        <img src={login} alt="" />
+                    <Link to="/like" onClick={handleLikeClick}>
+                        <button >
+                            <div className='flex items-center p-3 bg-white rounded-lg'>
+                                <HeartIcon />
+                            </div>
+                        </button>
+                    </Link>
+                    <div className='flex items-center p-3 h-12 bg-white rounded-lg'>
+                        {!loggedInUser ? (
+                            <button type='button' onClick={handleLoginClick}>
+                                <img src={login} alt="Login" />
+                            </button>
+                        ) : (
+                            <div className='flex items-center gap-2'>
+                                <p className='flex items-center'>{loggedInUser}</p>
+                                <button onClick={handleLogout} className='bg-green-500 text-white px-3 py-1 rounded'>
+                                    Logout
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
 
-
-            {/* Bottom Navbar */} <div className='flex items-center py-[14px] px-[210px] bg-white justify-between'>
+            {/* Bottom Navbar */}
+            <div className='flex items-center py-[14px] px-[210px] bg-white justify-between'>
                 <div className='flex items-center gap-8'>
                     <nav className='relative border py-2 px-9 rounded-xl'>
                         <div className='mr-auto'>
@@ -184,13 +232,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                             </button>
                             {dropdownOpen && (
                                 <div className='absolute top-full left-0 bg-white shadow-lg p-2 rounded-md z-10'>
-                                    <Link
-                                        to="/wing-chair"
-                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
-                                        onClick={() => handleCategoryChange('Wing Chair')}
-                                    >
-                                        Wing Chair
-                                    </Link>
+
                                     <Link
                                         to="/wooden-chair"
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
@@ -198,62 +240,67 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                                     >
                                         Wooden Chair
                                     </Link>
-                                    <Link
-                                        to="/desk-chair"
-                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
-                                        onClick={() => handleCategoryChange('Desk Chair')}
-                                    >
-                                        Desk Chair
-                                    </Link>
-                                    <Link
-                                        to="/park-chair"
-                                        className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
-                                        onClick={() => handleCategoryChange('Park Chair')}
-                                    >
-                                        Park Chair
-                                    </Link>
+
                                     <Link
                                         to="/room-chair"
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
-                                        onClick={() => handleCategoryChange('Room Chair')}
+                                        onClick={() => handleCategoryChange('Office Chair')}
                                     >
                                         Room Chair
                                     </Link>
                                     <Link
-                                        to="/scenic-chair"
+                                        to="/park-chair"
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
-                                        onClick={() => handleCategoryChange('Scenic Chair')}
+                                        onClick={() => handleCategoryChange('Arm Chair')}
                                     >
-                                        Scenic Chair
+                                        Park Chair
                                     </Link>
                                     <Link
-                                        to="/beautiful-chair"
+                                        to="/desk-chair"
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
-                                        onClick={() => handleCategoryChange('Beautiful Chair')}
+                                        onClick={() => handleCategoryChange('All Categories')}
                                     >
-                                        Beautiful Chair
+                                        Desk Chair
                                     </Link>
                                 </div>
                             )}
                         </div>
                     </nav>
-                    <div className='flex gap-5 ml-5'>
-                        <Link to="#home" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Home</Link>
-                        <Link to="#shop" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Shop</Link>
-                        <Link to="#product" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Product</Link>
-                        <Link to="#pages" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>Pages</Link>
-                        <Link to="#about" className='text-black font-inter text-[14px] font-medium leading-[15.4px] text-left hover:text-[#007bff] no-underline'>About</Link>
-                    </div>
+                    <Link
+                        to="/furniture"
+                        className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
+                    >
+                        Furniture
+                    </Link>
+                    <Link
+                        to="/shop"
+                        className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
+                    >
+                        Shop
+                    </Link>
+                    <Link
+                        to="/about-us"
+                        className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
+                    >
+                        About Us
+                    </Link>
+                    <Link
+                        to="/contact-us"
+                        className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
+                    >
+                        Contact Us
+                    </Link>
                 </div>
-                <div className='flex items-center'>
-                    <p className='font-inter text-sm font-normal leading-[15.4px] text-[#636270] text-left'>Contact: </p>
-                    <p className='font-inter text-sm font-medium leading-[15.4px] text-[#272343] text-left'>(808) 555-0111</p>
+                <div className='flex items-center gap-10'>
+                    <p className='font-inter text-xs font-medium leading-4 text-center text-[#4e4e4f]'>
+                        Call Us +998900178080
+                    </p>
+                    <button className='bg-[#A4BCFD] rounded-3xl py-3 px-4 font-inter text-xs font-medium leading-4 text-center text-[#272343]'>
+                        Get Discount
+                    </button>
                 </div>
             </div>
-
-            <hr className='w-full shadow-[0px_1px_0px_0px_#E1E3E5]' />
         </div>
-
     );
 };
 

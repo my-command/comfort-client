@@ -5,15 +5,14 @@ const ParkChairs = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5001/top_categories/')
+    fetch('http://localhost:5001/ParkProducts')
       .then(res => res.json())
       .then(data => {
-        const parkChairsCategory = data.find(v => v.title === 'Park Chair');
-        setData(parkChairsCategory.ParkProducts);
+        // Barcha mahsulotlarni olish
+        setData(data);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
-  
   return (
     <div className='px-12 py-6 m-11'>
       <h1 className='text-4xl font-medium text-center mb-8'>Park Chair</h1>

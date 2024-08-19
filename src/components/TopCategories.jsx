@@ -25,6 +25,7 @@ const TopCategories = () => {
                                 <p className='mb-1'>{category.title}</p>
                                 <p>{category.product}</p>
                             </div>
+                            
                         </div>
                     </NavLink>
                 ))}

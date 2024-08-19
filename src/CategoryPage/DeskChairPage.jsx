@@ -1,35 +1,61 @@
+
 import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
-const DeskChairPage = () => {
-    const [deskChair, setDeskChair] = useState(null);
+const DeskChairs = () => {
+  const [data, setData] = useState([]);
 
-    useEffect(() => {
-        fetch('http://localhost:5000/top_categories/3') // JSON serverdan ma'lumot olish
-            .then(response => response.json())
-            .then(data => setDeskChair(data));
-    }, []);
-
-    return (
-        <div>
-            {deskChair ? (
-                <>
-                    <div className='flex justify-center flex-col pt-7 px-10 gap-16'>
-                        <p className='flex justify-center items-center text-4xl font-bold text-center text-gray-800 uppercase tracking-wider' >{deskChair.title}</p>
-                        <div className='flex items-center justify-start gap-20 flex-wrap '>
-                            {deskChair.DeskProducts && deskChair.DeskProducts.map(product => (
-                                <div key={product.id}>
-                                    <img src={product.url} alt={product.title} style={{ width: '250px', height: '250px' }} />
-                                    <p className='flex mt-2 text-xl font-bold text-gray-950 justify-center items-center'>{product.title}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </>
-            ) : (
-                <p>Loading...</p>
+  useEffect(() => {
+    fetch('http://localhost:5001/DeskProducts')
+      .then(res => res.json())
+      .then(data => {
+        // Barcha mahsulotlarni olish
+        setData(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+  
+  return (
+    <div className='px-12 py-6 m-11  '>
+      
+      <div className="flex flex-wrap justify-center gap-6 overflow-x-auto">
+        <h1 className='text-4xl font-medium'>Desk Chair</h1>
+        <div className='flex flex-wrap justify-center gap-6'>
+          
+        {data.map((product) => (
+          <NavLink
+            key={product.id}
+            to={`/category/${product.id}`}
+            className="relative flex flex-col items-center m-4 bg-white rounded-lg shadow-lg overflow-hidden w-60 h-72 group transform transition-transform duration-500 hover:scale-105"
+          >
+            <img
+              className="w-full h-48 object-cover"
+              src={product.url}
+              alt={product.title}
+            />
+            {product.status && (
+              <div
+                className={`absolute top-2 left-2 p-2 text-white rounded-lg ${
+                  product.status.toLowerCase() === 'sales'
+                    ? 'bg-orange-500'
+                    : 'bg-green-500'  
+                } hidden group-hover:block`} 
+              >
+                {product.status}
+              </div>
             )}
+            <div className="absolute bottom-0 left-0 w-full p-4 bg-white bg-opacity-80">
+              <div className="flex flex-col items-start">
+                <p className="text-black font-bold text-lg group-hover:text-green-500 transition-colors duration-300">{product.title}</p>
+                <p className="text-black text-lg font-semibold">{product.cost}</p>
+              </div>
+            </div>
+          </NavLink>
+        ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
-export default DeskChairPage;
+export default DeskChairs;

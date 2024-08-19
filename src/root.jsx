@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Router, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Banner from './components/Banner';
 import FeaturedProducts from './components/FeaturedProduct';
@@ -15,19 +15,22 @@ import Footer from './components/footer';
 import Basket from './pages/Basket';
 import ParkChairPage from "./CategoryPage/ParkChairPage";
 import RoomChairPage from "./CategoryPage/RoomChairPage";
-import ScenicChairPage from "./CategoryPage/ScenicChairPage";
 import WoodenChairPage from "./CategoryPage/WoodenChairPage";
-import WingChairPage from "./CategoryPage/WingChairPage";
 import DeskChairPage from './CategoryPage/DeskChairPage';
-import BeautifulChairPage from './CategoryPage/BeautifulChairPage';
 import EndFooter from './components/EndFooter';
+import Like from './components/Like';
+
 
 const Root = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [basketCount, setBasketCount] = useState(0);
+  const [like, setLikeCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
-
+  const handleSearch = (query) => {
+      setSearchQuery(query);
+  };
   const handleShowLogin = (show) => {
     setShowLogin(show);
   };
@@ -37,7 +40,6 @@ const Root = () => {
     setShowLogin(false);
   };
 
-
   return (
     <div>
       <Navbar
@@ -45,33 +47,37 @@ const Root = () => {
         loggedInUser={loggedInUser}
         setLoggedInUser={setLoggedInUser}
         basketCount={basketCount}
+        like={like}
+        onSearch={handleSearch}
       />
       {showLogin ? (
         <Login onLoginSuccess={handleLoginSuccess} />
       ) : (
         <>
-
-          {/* Conditional rendering of Basket based on user login */}
-          {loggedInUser && <Basket />}
-
           <Routes>
-            <Route path="/" element={<><Banner /><FeaturedProducts updateBasketCount={setBasketCount} loggedInUser={loggedInUser} /><TopCategories /></>} />
-            <Route path="category/1" element={<DeskChairs />} />
-            <Route path="category/2" element={<WoodenChairs />} />
-            <Route path="category/3" element={<DeskChairs />} />
-            <Route path="category/4" element={<ParkChairs />} />
-            <Route path="category/5" element={<RoomChairs />} />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Banner />
+                  <FeaturedProducts searchQuery={searchQuery}  updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />
+                  <TopCategories />
+                  <Testimonials loggedInUser={loggedInUser} />
+                </>
+              }
+            />
+            <Route path="/category/1" element={<DeskChairs />} />
+            <Route path="/category/2" element={<WoodenChairs />} />
+            <Route path="/category/3" element={<DeskChairs />} />
+            <Route path="/category/4" element={<ParkChairs />} />
+            <Route path="/category/5" element={<RoomChairs />} />
             <Route path="/basket" element={<Basket />} />
             <Route path="/desk-chair" element={<DeskChairPage />} />
             <Route path="/park-chair" element={<ParkChairPage />} />
             <Route path="/room-chair" element={<RoomChairPage />} />
-            <Route path="/scenic-chair" element={<ScenicChairPage />} />
-            <Route path="/beautiful-chair" element={<BeautifulChairPage />} />
             <Route path="/wooden-chair" element={<WoodenChairPage />} />
-            <Route path="/wing-chair" element={<WingChairPage />} />
-
+            <Route path="/like" element={<Like />} />
           </Routes>
-          <Testimonials loggedInUser={loggedInUser} />
           <Footer />
           <EndFooter />
         </>
@@ -79,5 +85,4 @@ const Root = () => {
     </div>
   );
 };
-
 export default Root;
