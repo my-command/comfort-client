@@ -19,6 +19,7 @@ import WoodenChairPage from "./CategoryPage/WoodenChairPage";
 import DeskChairPage from './CategoryPage/DeskChairPage';
 import EndFooter from './components/EndFooter';
 import Like from './components/Like';
+import { LanguageProvider } from './context/LanguageContext';
 
 
 const Root = () => {
@@ -42,7 +43,8 @@ const Root = () => {
 
   return (
     <div>
-      <Navbar
+      <LanguageProvider>
+              <Navbar
         setShowLogin={handleShowLogin}
         loggedInUser={loggedInUser}
         setLoggedInUser={setLoggedInUser}
@@ -82,6 +84,8 @@ const Root = () => {
           <EndFooter />
         </>
       )}
+      </LanguageProvider>
+
     </div>
   );
 };

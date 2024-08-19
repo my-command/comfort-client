@@ -6,7 +6,8 @@ import logo from '../../public/assets/logo.png';
 import search from '../../public/assets/search.png';
 import shop from '../../public/assets/shop.png';
 import login from '../../public/assets/login.png';
-
+import translations from '../lang/translation.json';
+import { useLanguage } from '../context/LanguageContext';
 const HeartIcon = () => (
     <svg
         className="w-6 h-6 fill-currentborder "
@@ -23,6 +24,8 @@ const HeartIcon = () => (
 );
 
 const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
+    const { selectedLanguage, handleChange } = useLanguage();
+    const t = translations[selectedLanguage]; // Get the translation based on the selected languag
     const [selectedOption, setSelectedOption] = useState('Eng');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [basketCount, setBasketCount] = useState(0);
@@ -115,10 +118,6 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
     const handleLikeClick = () => {
         navigate('/like');
     };
-    const handleChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
-
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
@@ -135,26 +134,22 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                 <div className='flex items-center gap-2'>
                     <img src={img} alt="Free shipping" />
                     <p className='font-inter text-xs font-normal leading-4 text-[#F0F2F3] cursor-pointer'>
-                        Free shipping on all orders over $50
+                        {t.freeShipping}
                     </p>
                 </div>
                 <div className='flex items-center gap-6'>
-                    <select
-                        onChange={handleChange}
-                        value={selectedOption}
-                        className="bg-transparent text-[#F0F2F3] focus:outline-none"
-                    >
-                        <option value="Eng" style={{ backgroundColor: '#2B2D2F', color: '#F0F2F3' }}>Eng</option>
-                        <option value="Uzb" style={{ backgroundColor: '#2B2D2F', color: '#F0F2F3' }}>Uzb</option>
-                        <option value="Rus" style={{ backgroundColor: '#2B2D2F', color: '#F0F2F3' }}>Rus</option>
+                <select onChange={(e) => handleChange(e.target.value)} value={selectedLanguage} className="bg-transparent text-[#F0F2F3] focus:outline-none">
+                        <option value="Eng">Eng</option>
+                        <option value="Uzb">Uzb</option>
+                        <option value="Rus">Rus</option>
                     </select>
                     <p className='font-inter text-xs font-normal leading-4 text-center text-[#f0f2f3] cursor-pointer'>
-                        Faqs
+                        {t.faqss}
                     </p>
                     <div className='flex items-center gap-1.5'>
                         <img src={info} alt="Info" />
                         <p className='font-inter text-xs font-normal leading-4 text-center text-[#f0f2f3] cursor-pointer'>
-                            Need Help
+                            {t.needHelp}
                         </p>
                     </div>
                 </div>
@@ -172,7 +167,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                 <div className="relative">
                     <input
                         type="text"
-                        placeholder="Search here..."
+                        placeholder={t.Search}
                         className="w-[413px]  pl-4 py-3 border border-transparent bg-white rounded-[5px] focus:outline-none focus:placeholder:text-[#9A9CAA] placeholder:text-[#9A9CAA] text-[#9A9CAA] font-inter text-base font-normal leading-6 text-left"
                     />
                     <img
@@ -187,7 +182,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                             <button className='flex items-center gap-3' >
                                 <img className='w-7' src={shop} alt="Cart" />
                                 <p className='font-medium flex items-center gap-3 text-lg leading-4 text-center text-[#4e4e4f]'>
-                                    Cart
+                                    {t.Cart}
                                     <div className='w-6 h-6 flex items-center justify-center text-sm rounded-full text-white font-normal bg-emerald-700'>
                                         {basketCount}
                                     </div>
@@ -238,7 +233,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
                                         onClick={() => handleCategoryChange('Wooden Chair')}
                                     >
-                                        Wooden Chair
+                                        {t.WoodenChair}
                                     </Link>
 
                                     <Link
@@ -246,21 +241,21 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
                                         onClick={() => handleCategoryChange('Office Chair')}
                                     >
-                                        Room Chair
+                                        {t.RoomChair}
                                     </Link>
                                     <Link
                                         to="/park-chair"
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
                                         onClick={() => handleCategoryChange('Arm Chair')}
                                     >
-                                        Park Chair
+                                        {t.ParkChair    }
                                     </Link>
                                     <Link
                                         to="/desk-chair"
                                         className='block py-1 px-2 text-black no-underline hover:text-[#007bff]'
                                         onClick={() => handleCategoryChange('All Categories')}
                                     >
-                                        Desk Chair
+                                       {t.DeskChair}
                                     </Link>
                                 </div>
                             )}
@@ -270,25 +265,25 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                         to="/furniture"
                         className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
                     >
-                        Furniture
+                       {t.Furiniture}
                     </Link>
                     <Link
                         to="/shop"
                         className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
                     >
-                        Shop
+                        {t.shop}
                     </Link>
                     <Link
                         to="/about-us"
                         className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
                     >
-                        About Us
-                    </Link>
+                        {t.about}
+                    </Link> 
                     <Link
                         to="/contact-us"
                         className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
                     >
-                        Contact Us
+                        {t.contact}
                     </Link>
                 </div>
                 <div className='flex items-center gap-10'>

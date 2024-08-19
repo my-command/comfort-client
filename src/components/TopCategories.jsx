@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-
+import { useLanguage } from '../context/LanguageContext';
+import translations from '../lang/translation.json'; // Import translation JSON
 const TopCategories = () => {
     const [data, setData] = useState([]);
-
+    const { selectedLanguage, handleChange } = useLanguage();
     useEffect(() => {
         fetch('http://localhost:5001/top_categories')
             .then(res => res.json())
@@ -12,10 +13,10 @@ const TopCategories = () => {
     }, []);
 
     console.log(data);
-
+    const t = translations[selectedLanguage];
     return (
         <div className='px-[100px]'>
-            <p className='py-[20px] text-[32px]'>Top Categories</p>
+            <p className='py-[20px] text-[32px]'>{t.topCategories}</p>
             <div className="carousel rounded-box flex items-center gap-5 relative">
                 {data.map((category, index) => (
                     <NavLink key={index} to={`/category/${category.id}`} className="carousel-item relative flex items-center flex-col cursor-pointer">
@@ -24,6 +25,7 @@ const TopCategories = () => {
                             <div className='text-center'>
                                 <p className='mb-1'>{category.title}</p>
                                 <p>{category.product}</p>
+                                <p>{t.viewProduct}</p>
                             </div>
                             
                         </div>
