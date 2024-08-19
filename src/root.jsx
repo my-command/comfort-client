@@ -73,7 +73,7 @@ const Root = () => {
             <Route path="/park-chair" element={<ParkChairPage />} />
             <Route path="/room-chair" element={<RoomChairPage />} />
             <Route path="/wooden-chair" element={<WoodenChairPage />} />
-      
+      <Route path='/like' element={<Like/>}/>
           </Routes>
           <Footer />
           <EndFooter />
