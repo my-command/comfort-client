@@ -4,7 +4,7 @@ const Loading = () => {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        const timeOptions = [1000, 2000, 3000, 4000, 5000];
+        const timeOptions = [1000, 2000, 3000, 4000, 5000, 6000, 7000];
         const randomTime = timeOptions[Math.floor(Math.random() * timeOptions.length)];
 
         const timer = setTimeout(() => {
