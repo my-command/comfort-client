@@ -4,7 +4,7 @@ const Hamkorlar = () => {
     const [data, setData] = useState([])
     const[url, setUrl] = useState('')
     useEffect(() => {
-        fetch('http://localhost:5000/Hamkorlar/')
+        fetch('http://localhost:5001/Hamkorlar/')
             .then(res => res.json())
             .then(data => setData(data))
     }, [])
@@ -13,7 +13,7 @@ const Hamkorlar = () => {
 
     return (
         <>
-            <div className=" flex justify-between h-[100vh] items-center">
+            <div className=" flex justify-between items-center">
                 {
                     data.map((v) => (
                         <img className=" w-[180px] h-[87px]" src={v.url} alt="" />

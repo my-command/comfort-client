@@ -6,10 +6,12 @@ import zash from "../../public/assets/zash.png";
 import stul from "../../public/assets/stul1.png";
 import stull from "../../public/assets/stul2.png";
 import stulll from "../../public/assets/stul3.png";
-
+import { useLanguage } from '../context/LanguageContext'; // Import the useLanguage hook
+import translations from '../lang/translation.json'; // Import your translation JSON file
 const Banner = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const { selectedLanguage } = useLanguage(); // Get selected language from context
+    const t = translations[selectedLanguage] || translations['Eng']; // Get translations for the selected language
     const slides = [stul, stull, stulll];
 
     useEffect(() => {
@@ -32,14 +34,14 @@ const Banner = () => {
                                     }`}
                             >
                                 <div>
-                                    <p className="text-black">Welcome to Chairy</p>
+                                    <p className="text-black">{t.welcome}</p>
                                     <div className="w-[631px] h-[225px] text-gray-900">
                                         <p className="text-6xl font-bold leading-tight">
-                                            Best Furniture Collection for your interior.
+                                            {t.bestFurnitureCollection}
                                         </p>
                                     </div>
                                     <button className="bg-teal-500 text-white font-semibold rounded-md flex items-center justify-center h-[52px] w-[171px] hover:bg-teal-600">
-                                        Shop Now
+                                        {t.shopNow}
                                         <span className="ml-2">→</span>
                                     </button>
                                 </div>
@@ -90,16 +92,16 @@ const Banner = () => {
                 <div className="flex gap-[16px]">
                     <img className="w-[46px] h-[46px]" src={box} alt="Discount" />
                     <div>
-                        <p className="text-black">Discount</p>
-                        <p>Every week new sales</p>
+                        <p className="text-black">{t.discount}</p>
+                        <p>{t.newSales}</p>
                     </div>
                 </div>
 
                 <div className="flex gap-[16px]">
                     <img className="w-[46px] h-[46px]" src={truck} alt="Free Delivery" />
                     <div>
-                        <p className="text-black">Free Delivery</p>
-                        <p>100% Free for all orders</p>
+                        <p className="text-black">{t.freeDelivery}</p>
+                        <p>{t.freeForAllOrders}</p>
                     </div>
                 </div>
 
@@ -111,16 +113,16 @@ const Banner = () => {
                         alt="Great Support 24/7"
                     />
                     <div>
-                        <p className="text-black">Great Support 24/7</p>
-                        <p>We care about your experiences</p>
+                        <p className="text-black">{t.greatSupport}</p>
+                        <p>{t.careAboutExperiences}</p>
                     </div>
                 </div>
 
                 <div className="flex gap-[16px]">
                     <img className="w-[46px] h-[46px]" src={zash} alt="Secure Payment" />
                     <div>
-                        <p className="text-black">Secure Payment</p>
-                        <p>100% Secure Payment Method</p>
+                        <p className="text-black">{t.securePayment}</p>
+                        <p>{t.securePaymentMethod}</p>
                     </div>
                 </div>
             </div>
@@ -129,4 +131,3 @@ const Banner = () => {
 };
 
 export default Banner;
-

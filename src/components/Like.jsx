@@ -22,9 +22,9 @@ const Like = () => {
     useEffect(() => {
         const fetchLikedItems = async () => {
             try {
-                const response = await fetch(`http://localhost:5001/Users?name=${loggedInUser}`);
+                const response = await fetch('http://localhost:5001/Users');
                 const users = await response.json();
-                const user = users[0];
+                const user = users.find(user => user.name === loggedInUser);
 
                 if (user) {
                     setLikedItems(user.likedItems || []);
@@ -43,9 +43,9 @@ const Like = () => {
 
     const updateLikes = async (updatedLikedItems) => {
         try {
-            const response = await fetch(`http://localhost:5001/Users?name=${loggedInUser}`);
+            const response = await fetch('http://localhost:5001/Users');
             const users = await response.json();
-            const user = users[0];
+            const user = users.find(user => user.name === loggedInUser);
 
             if (user) {
                 await fetch(`http://localhost:5001/Users/${user.id}`, {
@@ -106,7 +106,7 @@ const Like = () => {
                                 onClick={() => handleLike(item)}
                                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                             >
-                                Remove
+                                remove
                             </button>
                         </div>
                     ))}

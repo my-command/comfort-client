@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Router, Routes } from 'react-router-dom';
+import { Route, Router, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Banner from './components/Banner';
 import FeaturedProducts from './components/FeaturedProduct';
@@ -18,8 +18,10 @@ import RoomChairPage from "./CategoryPage/RoomChairPage";
 import WoodenChairPage from "./CategoryPage/WoodenChairPage";
 import DeskChairPage from './CategoryPage/DeskChairPage';
 import EndFooter from './components/EndFooter';
+import Hamkorlar from './components/Hamkorlar';
+import Loading from './components/Loading';
+import { LanguageProvider } from './context/LanguageContext';
 import Like from './components/Like';
-
 
 const Root = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -36,49 +38,66 @@ const Root = () => {
     setShowLogin(false);
   };
 
+  const location = useLocation();
+  const isChairPage = location.pathname.startsWith('/desk-chair') ||
+                      location.pathname.startsWith('/park-chair') ||
+                      location.pathname.startsWith('/room-chair') ||
+                      location.pathname.startsWith('/wooden-chair')||
+                      location.pathname.startsWith('/basket')||
+                      location.pathname.startsWith('/like')
+
   return (
     <div>
-      <Navbar
-        setShowLogin={handleShowLogin}
-        loggedInUser={loggedInUser}
-        setLoggedInUser={setLoggedInUser}
-        basketCount={basketCount}
-        like={like}
-      />
-      {showLogin ? (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      ) : (
-        <>
-          <Routes>
-            <Route 
-              path="/" 
-              element={
-                <>
-                  <Banner />
-                  <FeaturedProducts updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />
-                  <TopCategories />
-                  <Testimonials loggedInUser={loggedInUser} />
-                </>
-              } 
-            >
-              <Route path="category/1" element={<DeskChairs />} />
-              <Route path="category/2" element={<WoodenChairs />} />
-              <Route path="category/3" element={<DeskChairs />} />
-              <Route path="category/4" element={<ParkChairs />} />
-              <Route path="category/5" element={<RoomChairs />} />
-            </Route>
-            
-            <Route path="/basket" element={<Basket />} />
-            <Route path="/desk-chair" element={<DeskChairPage />} />
-            <Route path="/park-chair" element={<ParkChairPage />} />
-            <Route path="/room-chair" element={<RoomChairPage />} />
-            <Route path="/wooden-chair" element={<WoodenChairPage />} />
-      <Route path='/like' element={<Like/>}/>
-          </Routes>
-          <Footer />
-          <EndFooter />
-        </>
-      )}
+      <LanguageProvider>
+        <Loading />
+        <Navbar
+              setShowLogin={handleShowLogin}
+              loggedInUser={loggedInUser}
+              setLoggedInUser={setLoggedInUser}
+              basketCount={basketCount}
+              like={like}
+            />
+        {!isChairPage && (
+            <> 
+            <Banner />
+
+            <FeaturedProducts updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />
+          
+          </>
+        )}
+        {showLogin ? (
+          <Login onLoginSuccess={handleLoginSuccess} />
+        ) : (
+          <>
+            <Routes>
+              <Route path="/" element={<TopCategories />} >
+              <Route path="/category/1" element={<DeskChairs updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />} />
+              <Route path="/category/2" element={<WoodenChairs updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser}  />} />
+              <Route path="/category/3" element={<DeskChairs updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser}  />} />
+              <Route path="/category/4" element={<ParkChairs updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser}  />} />
+              <Route path="/category/5" element={<RoomChairs updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser}  />} />
+              </Route>
+              <Route path="/basket" element={<Basket />} />
+              
+              <Route path="/desk-chair" element={<DeskChairPage updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser}  />} />
+              <Route path="/park-chair" element={<ParkChairPage updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />} />
+              <Route path="/room-chair" element={<RoomChairPage updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />} />
+              <Route path="/wooden-chair" element={<WoodenChairPage updateBasketCount={setBasketCount} updateLikeCount={setLikeCount} loggedInUser={loggedInUser} />} />
+              <Route path="/like" element={<Like />} />
+            </Routes>
+            {!isChairPage && (
+              <>
+                <Testimonials loggedInUser={loggedInUser} />
+             
+              </>
+
+            )}
+              <Footer />
+                <EndFooter />
+                <Hamkorlar />
+          </>
+        )}
+      </LanguageProvider>
     </div>
   );
 };

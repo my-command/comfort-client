@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import img10 from "../../public/assets/10.png";
 import img109 from "../../public/assets/109.png";
-
+import translations from '../lang/translation.json';
+import { useLanguage } from '../context/LanguageContext';
 const Testimonials = ({ loggedInUser }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [activeButton, setActiveButton] = useState(null);
   const containerRef = useRef(null);
-
+    const { selectedLanguage } = useLanguage(); // Get selected language from context
+    const t = translations[selectedLanguage];
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -24,12 +26,12 @@ const Testimonials = ({ loggedInUser }) => {
 
   const handleAddComment = () => {
     const date = new Date().toLocaleString();
-
+ // Get translations for the selected language
     const newCommentObj = {
       id: comments.length + 1,
       commet: newComment,
       url: "https://via.placeholder.com/150",
-      name: loggedInUser , // Foydalanuvchi ismi
+      name: loggedInUser, // Foydalanuvchi ismi
       field: "Customer",
       date: date
     };
@@ -60,11 +62,11 @@ const Testimonials = ({ loggedInUser }) => {
     <div className="bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className='flex items-center w-[1200px] justify-between mb-11'>
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-8">What Clients Say About Us</h2>
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-8">{t.WhatClientsSay}</h2>
           <input
             type="text"
-            placeholder='comment...'
-            value={newComment}
+            placeholder={t.comment}
+                        value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             className="border p-2 rounded-md"
           />
@@ -72,7 +74,7 @@ const Testimonials = ({ loggedInUser }) => {
             onClick={handleAddComment}
             className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
           >
-            Add Comment
+            {t.addcomment}
           </button>
         </div>
         <div className='flex gap-3 mb-6 justify-between w-[1180px]'>
@@ -122,4 +124,4 @@ const Testimonials = ({ loggedInUser }) => {
   );
 };
 
-export default Testimonials ;
+export default Testimonials;

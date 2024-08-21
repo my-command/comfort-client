@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Like from './Like';
-
+import { useLanguage } from '../context/LanguageContext'; // Import the useLanguage hook
+import translations from '../lang/translation.json'; // Import your translation JSON file
 const HeartIcon = ({ isLiked }) => (
     <svg
         className={`w-6 h-6 fill-current ${isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
@@ -21,7 +22,8 @@ const FeaturedProducts = ({ updateBasketCount, loggedInUser }) => {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
-
+    const { selectedLanguage } = useLanguage(); // Get selected language from context
+    const t = translations[selectedLanguage] || translations['Eng']; // Get translations for the selected language
     useEffect(() => {
         // Fetch featured products and users data
         fetch('http://localhost:5001/Featured_Products')
@@ -137,7 +139,7 @@ const FeaturedProducts = ({ updateBasketCount, loggedInUser }) => {
     return (
         <div className="px-12 py-6 m-5">
             <div className="flex items-center flex-nowrap justify-between mb-6 overflow-x-auto">
-                <p className="text-2xl font-bold">Featured Products</p>
+                <p className="text-2xl font-bold">{t.featuredProducts}</p>
                 <div className="pagination flex items-center gap-2 m-3">
                     <button
                         className="px-4 py-2 rounded-full text-xl bg-gray-400 hover:bg-green-500 transition-all duration-500 disabled:bg-gray-200 disabled:text-gray-500"
