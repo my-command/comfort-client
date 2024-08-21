@@ -279,7 +279,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                         Shop
                     </Link>
                     <Link
-                        to="/about-us"
+                        to="/about"
                         className='font-inter text-base font-normal leading-5 text-[#4e4e4f] no-underline hover:text-[#007bff]'
                     >
                         About Us
@@ -290,6 +290,7 @@ const Navbar = ({ setShowLogin, loggedInUser, setLoggedInUser }) => {
                     >
                         Contact Us
                     </Link>
+                    
                 </div>
                 <div className='flex items-center gap-10'>
                     <p className='font-inter text-xs font-medium leading-4 text-center text-[#4e4e4f]'>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Router, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Banner from './components/Banner';
 import FeaturedProducts from './components/FeaturedProduct';
@@ -19,7 +19,10 @@ import WoodenChairPage from "./CategoryPage/WoodenChairPage";
 import DeskChairPage from './CategoryPage/DeskChairPage';
 import EndFooter from './components/EndFooter';
 import Like from './components/Like';
-
+import Shop from './components/Shop';  
+import About from './components/About';
+import Furniture from './components/Furniture';
+import ContactUs from './components/Contact_Us'; // Import the ContactUs component
 
 const Root = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -69,11 +72,15 @@ const Root = () => {
             </Route>
             
             <Route path="/basket" element={<Basket />} />
+            <Route path="/shop" element={<Shop />} />
             <Route path="/desk-chair" element={<DeskChairPage />} />
             <Route path="/park-chair" element={<ParkChairPage />} />
             <Route path="/room-chair" element={<RoomChairPage />} />
             <Route path="/wooden-chair" element={<WoodenChairPage />} />
-      <Route path='/like' element={<Like/>}/>
+            <Route path="/like" element={<Like />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/furniture" element={<Furniture />} />
+            <Route path="/contact-us" element={<ContactUs/>} /> {/* New route added */}
           </Routes>
           <Footer />
           <EndFooter />
